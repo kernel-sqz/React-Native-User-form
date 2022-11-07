@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, CheckBox } from "react-native";
 import { Input, Avatar, Icon } from "@rneui/themed";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import * as ImagePicker from "expo-image-picker";
 
 export default function App() {
   const [type, setType] = useState(true);
@@ -44,6 +45,19 @@ export default function App() {
     }
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setPicture(result.uri);
+    }
+  };
+
   const identificationNumberMessage =
     checkPesel() === true ? "Poprawny pesel" : "Niepoprawny pesel";
 
@@ -71,7 +85,7 @@ export default function App() {
             title={firstNameLetter + lastNameLetter}
             containerStyle={{ backgroundColor: "#3d4db7" }}
           >
-            <Avatar.Accessory size={32} onPress={() => console.log("dupa")} />
+            <Avatar.Accessory size={32} onPress={pickImage} />
           </Avatar>
         </View>
         <View style={[styles.group, styles.button]}>
