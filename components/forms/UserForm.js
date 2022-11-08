@@ -90,7 +90,7 @@ export const UserForm = () => {
       })
       .catch((err) => {
         console.log("Response error", err);
-        setPostMessage(<Text>Błąd ${err.message}</Text>);
+        setPostMessage(<Text>Nie znaleziono metody zapisu</Text>);
       });
   };
 
