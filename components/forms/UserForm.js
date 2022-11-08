@@ -22,8 +22,6 @@ export const UserForm = () => {
   const switchType = type === true ? "87231623021" : "1234563218";
   const switchTypeLabel = type === true ? "Pesel" : "NIP";
 
-  const showDisplayImageMessage = displayImageMessage === false ? "none" : "";
-
   const activateSubmit = () => {
     if (
       identificationNumber?.length >= 10 &&
@@ -52,12 +50,17 @@ export const UserForm = () => {
       quality: 1,
     });
 
-    const fileName = result.uri.split("/");
-    const extension = fileName[1].split(";");
+    const fileName = result?.uri.split(".");
+    const extension = fileName[fileName.length - 1];
 
-    if (!result.cancelled) {
+    if ((!result.cancelled && extension == "jpg") || extension == "jpeg") {
       setPicture(result);
       setDisplayImageMessage(false);
+    } else if (
+      (!result.cancelled && extension[0] !== "jpg") ||
+      extension[0] !== "jpeg"
+    ) {
+      setDisplayImageMessage(true);
     }
   };
 
@@ -118,6 +121,7 @@ export const UserForm = () => {
               <Avatar.Accessory size={32} onPress={pickImage} />
             </Avatar>
           </View>
+
           <View style={[styles.group, styles.button]}>
             <Input
               label="Imię"
