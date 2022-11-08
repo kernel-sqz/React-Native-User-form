@@ -1,4 +1,4 @@
-React-Native user example form
+# React-Native user example form
 
 Basic form created in react-native with support for PESEL and NIP validation.
 
@@ -15,6 +15,8 @@ In case of error execute:
 export NODE_OPTIONS=--openssl-legacy-provider 
 ```
 
+## TODO
+For now support for picture preview is only on mobile devices. This is caused by different file naming, and properties on mobile devices and browsers.
 
 ## License
 
