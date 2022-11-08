@@ -16,8 +16,8 @@ export NODE_OPTIONS=--openssl-legacy-provider
 ```
 
 ## TODO
-For now support for picture preview is only on mobile devices. This is caused by different file naming, and properties on mobile devices and browsers.
-
+~~For now support for picture preview is only on mobile devices. This is caused by different file naming, and properties on mobile devices and browsers.~~
+Done in latest commit
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
