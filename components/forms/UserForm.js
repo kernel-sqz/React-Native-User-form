@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, CheckBox } from "react-native";
+import { Text, View, Button, Image } from "react-native";
 import { styles } from "../../Styles";
-import { Input, Avatar, Icon } from "@rneui/themed";
+import { Input, Avatar, Icon, CheckBox } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import { checkIdentificationNumber } from "../../scripts/CheckValidID";
 import axios from "axios";
@@ -17,6 +17,8 @@ export const UserForm = () => {
   const [postMessage, setPostMessage] = useState(null);
   const [enableSubmit, setEnableSubmit] = useState(false);
 
+  const [status, requestPermission] = ImagePicker.useCameraPermissions(true);
+
   const switchType = type === true ? "87231623021" : "1234563218";
   const switchTypeLabel = type === true ? "Pesel" : "NIP";
 
@@ -24,7 +26,7 @@ export const UserForm = () => {
 
   const activateSubmit = () => {
     if (
-      identificationNumber.length >= 10 &&
+      identificationNumber?.length >= 10 &&
       firstName !== "" &&
       lastName !== ""
     ) {
@@ -34,11 +36,11 @@ export const UserForm = () => {
     }
   };
 
-  const firstNameLetter = firstName?.charAt(0);
-  const lastNameLetter = lastName?.charAt(0);
+  const firstNameLetter = String(firstName)?.charAt(0);
+  const lastNameLetter = String(lastName)?.charAt(0);
 
   const identificationNumberMessage =
-    checkIdentificationNumber(identificationNumber, type) === true
+    checkIdentificationNumber(identificationNumber ?? "", type) === true
       ? `Poprawny ${switchTypeLabel}`
       : `Niepoprawny ${switchTypeLabel}`;
 
@@ -53,17 +55,9 @@ export const UserForm = () => {
     const fileName = result.uri.split("/");
     const extension = fileName[1].split(";");
 
-    if (
-      (!result.cancelled && extension[0] == "jpg") ||
-      extension[0] == "jpeg"
-    ) {
-      setPicture(result.uri);
+    if (!result.cancelled) {
+      setPicture(result);
       setDisplayImageMessage(false);
-    } else if (
-      (!result.cancelled && extension[0] !== "jpg") ||
-      extension[0] !== "jpeg"
-    ) {
-      setDisplayImageMessage(true);
     }
   };
 
@@ -111,6 +105,7 @@ export const UserForm = () => {
               flexDirection: "row",
               justifyContent: "space-around",
               marginBottom: 30,
+              marginTop: 100,
             }}
           >
             <Avatar
@@ -123,22 +118,11 @@ export const UserForm = () => {
               <Avatar.Accessory size={32} onPress={pickImage} />
             </Avatar>
           </View>
-          <Text
-            style={{
-              marginTop: "2px",
-              marginBottom: "2px",
-              textAlign: "center",
-              color: "red",
-              display: `${showDisplayImageMessage}`,
-            }}
-          >
-            Wspierane rozrzeszenia: JPG, JPEG
-          </Text>
           <View style={[styles.group, styles.button]}>
             <Input
               label="Imię"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChangeText={(text) => setFirstName(text)}
               placeholderTextColor="rgba(0, 0, 0, 0.4)"
               placeholder="Adrian"
             />
@@ -147,37 +131,39 @@ export const UserForm = () => {
             <Input
               label="Nazwisko"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChangeText={(text) => setLastName(text)}
               placeholderTextColor="rgba(0, 0, 0, 0.4)"
               placeholder="Klemczak"
             />
           </View>
           <View style={[styles.group, styles.button, styles.checkBox]}>
-            <Text>Osoba fizyczna?</Text>
-
-            <CheckBox value={type} onValueChange={() => setType(!type)} />
+            <CheckBox
+              containerStyle={{ backgroundColor: "transparent" }}
+              title="Osoba fizyczna?"
+              checked={type}
+              onPress={() => setType(!type)}
+            />
           </View>
           <View style={[styles.group, styles.button]}>
             <Input
               label={switchTypeLabel}
               value={identificationNumber}
-              onChange={(e) => setIdentificationNumber(e.target.value)}
-              keyboardType="numeric"
+              onChangeText={(text) => setIdentificationNumber(text)}
               placeholderTextColor="rgba(0, 0, 0, 0.4)"
               placeholder={switchType}
             />
-            <Text style={{ textAlign: "center", marginTop: "10px" }}>
+            <Text style={{ textAlign: "center", marginTop: 10 }}>
               {identificationNumberMessage}
             </Text>
           </View>
-          <View style={{ marginBottom: "25px", marginTop: "15px" }}>
+          <View style={{ marginTop: 80 }}>
             <Button
               title="Zarejestruj"
               disabled={enableSubmit}
               onPress={handlePost}
             />
           </View>
-          <Text style={{ marginBottom: "6px", textAlign: "center" }}>
+          <Text style={{ paddingTop: 200, textAlign: "center" }}>
             {postMessage}
           </Text>
         </View>

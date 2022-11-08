@@ -3,16 +3,16 @@ export const checkIdentificationNumber = (digits, type) => {
   const nipMultiplicationTable = [6, 5, 7, 2, 3, 4, 5, 6, 7];
 
   let lastDigit = [];
-  let allDigits = [...digits];
+  let allDigits = [...(digits ?? "")];
   let onlyDigits = [];
   let multipied = [];
 
-  if (digits.length === 11 && type === true) {
-    for (let i = 0; i < allDigits.length; i++) {
+  if (digits?.length >= 11 && type === true) {
+    for (let i = 0; i < allDigits?.length; i++) {
       onlyDigits.push(parseInt(allDigits[i]));
     }
-    lastDigit.push(onlyDigits.pop());
-    for (let i = 0; i < onlyDigits.length; i++) {
+    lastDigit.push(onlyDigits?.pop());
+    for (let i = 0; i < onlyDigits?.length; i++) {
       multipied.push(onlyDigits[i] * peselMultiplicationTable[i]);
     }
 
@@ -25,8 +25,8 @@ export const checkIdentificationNumber = (digits, type) => {
       return true;
     }
     return false;
-  } else if (digits.length === 10 && type === false) {
-    for (let i = 0; i < allDigits.length; i++) {
+  } else if (digits?.length >= 10 && type === false) {
+    for (let i = 0; i < allDigits?.length; i++) {
       onlyDigits.push(parseInt(allDigits[i]));
     }
 
