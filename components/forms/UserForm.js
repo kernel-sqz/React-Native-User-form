@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Button, Image } from "react-native";
+import { Text, View, Button, Image, Platform } from "react-native";
+
 import { styles } from "../../Styles";
 import { Input, Avatar, Icon, CheckBox } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
@@ -50,10 +51,22 @@ export const UserForm = () => {
       quality: 1,
     });
 
-    const fileName = result?.uri.split(".");
-    const extension = fileName[fileName.length - 1];
+    let fileName;
+    let extension;
 
-    if ((!result.cancelled && extension == "jpg") || extension == "jpeg") {
+    const getExtension =
+      Platform.OS === "web"
+        ? ((fileName = result.uri.split("/")),
+          (extension = fileName[1].split(";")))
+        : ((fileName = result?.uri.split(".")),
+          (extension = fileName[fileName.length - 1]));
+
+    if (
+      (!result.cancelled && extension == "jpg") ||
+      extension == "jpeg" ||
+      extension[0] == "jpg" ||
+      extension[0] == "jpeg"
+    ) {
       setPicture(result);
       setDisplayImageMessage(false);
     } else if (
