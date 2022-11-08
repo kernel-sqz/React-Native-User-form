@@ -14,7 +14,7 @@ In case of error execute:
 ```bash
 export NODE_OPTIONS=--openssl-legacy-provider 
 ```
-## Scan in expo:
+## Scan in Expo Go:
 
 ![alt text](https://github.com/kernel-sqz/React-Native-User-form/blob/main/assets/expo_qr.png?raw=true) 
 
